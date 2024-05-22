@@ -1,16 +1,20 @@
 import React, { useState } from "react";
+import Responses from "./components/Responses";
+import Form from "./components/Form";
 
 function App() {
-  const [response, setResponse] = useState('');
-  
-  
+  const [message, setMessage] = useState([]); // Add this line
+  const [response, setResponse] = useState("");
+  const [previousMessages, setPreviousMessages] = useState([]); // Add this line
+  const [previousResponses, setPreviousResponses] = useState([]); // Add this line
+
   // Function to handle the form submission
 
-
-  function onSubmit (e) {
+  function onSubmit(e) {
     e.preventDefault();
     // Get the message from the input field
     const message = e.target.elements.message.value;
+    setMessage(message);
 
     // Send the message to the server
     fetch("http://localhost:5000/chat", {
@@ -19,7 +23,7 @@ function App() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        "message": message,
+        message: message,
       }),
     })
       .then((response) => response.json())
@@ -27,35 +31,32 @@ function App() {
         console.log(data);
         setResponse(data.response);
       })
+      .then(() => {
+        handleConversation();
+      })
       .catch((error) => {
         console.error("Error sending message: ", error);
       });
   }
 
+  function handleConversation() {
+    setPreviousMessages([...previousMessages, message]);
+    setPreviousResponses([...previousResponses, response]);
+    // console.log(previousMessages.length)
+  }
+
+
   return (
     <div>
-      <h1>ChatGPT</h1>
-      {/* Beginning of text entering */}
-      <form onSubmit={onSubmit}>
-        <label>
-          Enter your message:
-          <input type="text" name="message" />
-        </label>
-        <button type="submit">Send</button>
-      </form>
-      {/* End of text entering */}
-
-
-            {/* Beginning of response from api */}
-      {response && (
-        <div>
-          <h2>Response:</h2>
-          <p>{response}</p>
-        </div>
-      )}
-      {/* End of response from api */}
+      <Form onSubmit={onSubmit} />
+      <Responses
+        message={message}
+        response={response}
+        previousMessages={previousMessages}
+        previousResponses={previousResponses}
+      />
     </div>
-  )
+  );
 }
 
 export default App;
