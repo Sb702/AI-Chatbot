@@ -2,7 +2,8 @@
 
 .user-msg-wrap {
     display: flex;
-    justify-content: center;
+    justify-content: left;
+    padding-left: 2%;
     align-items: center;
     background-color: green;
     width: 50%;
@@ -13,11 +14,13 @@
     border-radius: 15px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
 
+
 }
 
 .ai-msg-wrap {
     display: flex;
-    justify-content: center;
+    justify-content: left;
+    padding-left: 2%;
     align-items: center;
     background-color: navy;
     width: 50%;
