@@ -3,9 +3,11 @@ const dotenv = require('dotenv');
 const app = express();
 const OpenAI = require('openai-api');
 const axios = require('axios');
+const cors = require('cors');
 
 // Middleware to parse JSON bodies
 app.use(express.json());
+app.use(cors());
 
 // Your OpenAI API key
 const OPENAI_API_KEY = 'sk-proj-lEIm1wpEf4dchA6quuyqT3BlbkFJcjfwLxqX6TZRQLXqa17d';
@@ -24,7 +26,7 @@ app.post('/chat', async (req, res) => {
       {
         model: 'gpt-3.5-turbo',
         messages: [
-          { role: 'system', content: 'You are a helpful assistant.' },
+          { role: 'system', content: 'You are a helpful assistant who is meant to translate whatever they get into Italian' },
           { role: 'user', content: message }
         ],
       },
