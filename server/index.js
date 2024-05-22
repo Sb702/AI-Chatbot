@@ -1,35 +1,50 @@
 const express = require('express');
-const axios = require('axios');
 const dotenv = require('dotenv');
 const app = express();
+const OpenAI = require('openai-api');
+const axios = require('axios');
 
+// Middleware to parse JSON bodies
 app.use(express.json());
 
-dotenv.config();
+// Your OpenAI API key
+const OPENAI_API_KEY = 'sk-proj-lEIm1wpEf4dchA6quuyqT3BlbkFJcjfwLxqX6TZRQLXqa17d';
 
-app.post('/api/openai', async (req, res) => {
-  const { prompt, max_tokens } = req.body;
+// Endpoint to interact with ChatGPT
+app.post('/chat', async (req, res) => {
+  const { message } = req.body;
 
-  const key = 'sk-proj-lEIm1wpEf4dchA6quuyqT3BlbkFJcjfwLxqX6TZRQLXqa17d'
+  if (!message) {
+    return res.status(400).json({ error: 'Message is required' });
+  }
 
   try {
-    const response = await axios.post('https://api.openai.com/v1/engines/davinci-codex/completions', {
-      prompt,
-      max_tokens
-    }, {
-      headers: {
-        'Authorization': `Bearer ${key}`,
-        'Content-Type': 'application/json'
+    const response = await axios.post(
+      'https://api.openai.com/v1/chat/completions',
+      {
+        model: 'gpt-3.5-turbo',
+        messages: [
+          { role: 'system', content: 'You are a helpful assistant.' },
+          { role: 'user', content: message }
+        ],
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${OPENAI_API_KEY}`,
+        },
       }
-    });
+    );
 
-    res.json(response.data);
+    const chatResponse = response.data.choices[0].message.content;
+    res.json({ response: chatResponse });
   } catch (error) {
-    console.error('Error fetching data: ', error);
-    res.status(500).json({ error: 'An error occurred while fetching data' });
+    console.error('Error communicating with OpenAI:', error.message);
+    res.status(500).json({ error: 'Failed to communicate with OpenAI' });
   }
 });
 
-app.listen(3001, () => {
-  console.log('Server is running on port 3001');
+const port = process.env.PORT || 5000;
+app.listen(port, () => {
+  console.log(`Server is running on http://localhost:${port}`);
 });
