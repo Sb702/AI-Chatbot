@@ -14,20 +14,22 @@ export default function Responses({
       {response && (
         <div>
           <div className="user-msg-wrap">
-            <p>{message}</p>
+            {message && <p>{message}</p>}
           </div>
           <div className="ai-msg-wrap">
-            <p>{response}</p>
+            {response && <p>{response}</p>}
           </div>{" "}
           {previousMessages.map((message, index) => (
-            <div key={index}>
-                <div className="user-msg-wrap">
-              <p className="main-user-message">{message}</p>
-                </div>
-                <div className="ai-msg-wrap">
-              <p className="main-ai-message">{previousResponses[index]}</p>
-                </div>
-            </div>
+            message && previousResponses[index] && (
+              <div key={index}>
+                  <div className="user-msg-wrap">
+                <p className="main-user-message">{message}</p>
+                  </div>
+                  <div className="ai-msg-wrap">
+                <p className="main-ai-message">{previousResponses[index]}</p>
+                  </div>
+              </div>
+            )
           ))}
         </div>
       )}

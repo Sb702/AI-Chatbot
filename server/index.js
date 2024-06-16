@@ -10,7 +10,7 @@ app.use(express.json());
 app.use(cors());
 
 // Your OpenAI API key
-const OPENAI_API_KEY = 'sk-proj-lEIm1wpEf4dchA6quuyqT3BlbkFJcjfwLxqX6TZRQLXqa17d';
+const OPENAI_API_KEY = 'sk-proj-W5OtN5pJhPZwAd8JEL59T3BlbkFJLn6kEDrJi4lbVWmDic0N';
 
 // Endpoint to interact with ChatGPT
 app.post('/chat', async (req, res) => {

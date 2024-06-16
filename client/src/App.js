@@ -1,60 +1,16 @@
-import React, { useState } from "react";
-import Responses from "./components/Responses";
-import Form from "./components/Form";
+import React, { useState }from 'react';
+import AiChat from './containers/AiChat';
+import UserAuth from './containers/UserAuth';
 
 function App() {
-  const [message, setMessage] = useState([]); // Add this line
-  const [response, setResponse] = useState("");
-  const [previousMessages, setPreviousMessages] = useState([]); // Add this line
-  const [previousResponses, setPreviousResponses] = useState([]); // Add this line
-
-  // Function to handle the form submission
-
-  function onSubmit(e) {
-    e.preventDefault();
-    // Get the message from the input field
-    const message = e.target.elements.message.value;
-    setMessage(message);
-
-    // Send the message to the server
-    fetch("http://localhost:5000/chat", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        message: message,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        setResponse(data.response);
-      })
-      .then(() => {
-        handleConversation();
-      })
-      .catch((error) => {
-        console.error("Error sending message: ", error);
-      });
-  }
-
-  function handleConversation() {
-    setPreviousMessages([...previousMessages, message]);
-    setPreviousResponses([...previousResponses, response]);
-    // console.log(previousMessages.length)
-  }
+  const [loggedIn, setLoggedIn] = useState(true);
 
 
   return (
     <div>
-      <Form onSubmit={onSubmit} />
-      <Responses
-        message={message}
-        response={response}
-        previousMessages={previousMessages}
-        previousResponses={previousResponses}
-      />
+      {loggedIn === false && <UserAuth loggedIn={loggedIn} setLoggedIn={setLoggedIn} />}
+      {/* <AiChat /> */}
+      {loggedIn && <AiChat />}
     </div>
   );
 }
