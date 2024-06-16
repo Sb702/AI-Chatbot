@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Login from '../components/Login';
 import Register from '../components/Register';
 
-export default function UserAuth({ loggedIn, setLoggedIn }) {
+export default function UserAuth({ loggedIn, setLoggedIn, setUser }) {
     const [selectedOption, setSelectedOption] = useState('login');
 
     const handleOptionChange = (option) => {
@@ -31,7 +31,7 @@ export default function UserAuth({ loggedIn, setLoggedIn }) {
                     Register
                 </label>
             </div>
-            {selectedOption === 'login' ? <Login /> : <Register />}
+            {selectedOption === 'login' ? <Login setLoggedIn={setLoggedIn} setUser={setUser} /> : <Register />}
         </div>
     );
 }

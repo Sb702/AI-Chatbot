@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Form from "../components/Form";
 import Responses from "../components/Responses";
 
-export default function AiChat() {
+export default function AiChat({ setLoggedIn, user }) {
   const [message, setMessage] = useState([]); // Add this line
   const [response, setResponse] = useState("");
   const [previousMessages, setPreviousMessages] = useState([]); // Add this line
@@ -47,7 +47,7 @@ export default function AiChat() {
 
   return (
     <div>
-      <Form onSubmit={onSubmit} />
+      <Form onSubmit={onSubmit} setLoggedIn={setLoggedIn} user={user} />
       <Responses
         message={message}
         response={response}

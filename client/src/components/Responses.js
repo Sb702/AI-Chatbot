@@ -6,7 +6,6 @@ export default function Responses({
   previousMessages,
   previousResponses,
 }) {
-  console.log(previousMessages);
 
   return (
     <div>

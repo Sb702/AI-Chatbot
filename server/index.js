@@ -36,6 +36,7 @@ app.post("/chat", routes.Chat);
 
 // Endpoint for Users
 app.post("/register", userRoutes.register);
+app.post("/login", userRoutes.login);
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
