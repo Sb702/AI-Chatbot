@@ -1,3 +1,9 @@
+.form {
+    display: flex;
+    gap: 2%;
+    padding: 2%;
+}
+
 .headline {
     font-size: 24px;
     font-weight: bold;
@@ -8,7 +14,7 @@
 }
 
 .input {
-    width: 100%;
+    width: 80vw;
     padding: 10px;
     margin: 10px 0;
     border: 1px solid #ccc;

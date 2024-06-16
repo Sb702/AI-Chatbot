@@ -1,0 +1,22 @@
+.chat-main-container {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    height: 100vh; /* Set the height to fill the viewport */
+}
+
+.Header {
+    /* Your header styles here */
+    grid-row: 1;
+}
+
+.Responses {
+    overflow-y: auto; /* Enable vertical scrolling */
+    grid-row: 2;
+}
+
+.Form {
+    /* Your form styles here */
+    grid-row: 3;
+    position: sticky;
+    bottom: 0;
+}

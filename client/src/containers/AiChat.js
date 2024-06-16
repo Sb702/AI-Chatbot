@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import Form from "../components/Form";
 import Responses from "../components/Responses";
+import Header from "../components/Header";
+import './AiChat.css';
 
 export default function AiChat({ setLoggedIn, user }) {
   const [message, setMessage] = useState([]); // Add this line
@@ -39,15 +41,16 @@ export default function AiChat({ setLoggedIn, user }) {
       });
   }
 
-  function handleConversation() {
-    setPreviousMessages([...previousMessages, message]);
-    setPreviousResponses([...previousResponses, response]);
-    // console.log(previousMessages.length)
-  }
+function handleConversation() {
+  // Add the new message to the end of the previousMessages array
+  setPreviousMessages(previousMessages => [...previousMessages, message]);
+  setPreviousResponses(previousResponses => [...previousResponses, response]);
+}
 
-  return (
-    <div>
-      <Form onSubmit={onSubmit} setLoggedIn={setLoggedIn} user={user} />
+return (
+  <div className="chat-main-container">
+    <Header className="Header" user={user} setLoggedIn={setLoggedIn} />
+    <div className="Responses">
       <Responses
         message={message}
         response={response}
@@ -55,5 +58,7 @@ export default function AiChat({ setLoggedIn, user }) {
         previousResponses={previousResponses}
       />
     </div>
-  );
+    <Form className="Form" onSubmit={onSubmit} setLoggedIn={setLoggedIn} user={user} />
+  </div>
+);
 }
