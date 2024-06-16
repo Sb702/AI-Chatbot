@@ -1,50 +1,41 @@
-const express = require('express');
-const dotenv = require('dotenv');
+const express = require("express");
+const dotenv = require("dotenv");
 const app = express();
-const OpenAI = require('openai-api');
-const axios = require('axios');
-const cors = require('cors');
+const cors = require("cors");
+const routes = require("./routes/chatRoutes");
+const userRoutes = require("./routes/userRoutes");
+const mongoose = require("mongoose");
+
+dotenv.config();
+
+// Connect to MongoDB and log when connected
+mongoose.connect(
+  `mongodb+srv://bisignanosam:Tree123.@chatcluster0.nb9enyn.mongodb.net/`,
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  }
+);
+
+mongoose.connection.on("connected", () => {
+  console.log("Connected to MongoDB");
+});
+
+// Middleware to parse JSON bodies
+app.use(express.json());
+
+// Middleware to parse URL-encoded bodies
+app.use(express.urlencoded({ extended: true }));
 
 // Middleware to parse JSON bodies
 app.use(express.json());
 app.use(cors());
 
-// Your OpenAI API key
-const OPENAI_API_KEY = 'sk-proj-W5OtN5pJhPZwAd8JEL59T3BlbkFJLn6kEDrJi4lbVWmDic0N';
-
 // Endpoint to interact with ChatGPT
-app.post('/chat', async (req, res) => {
-  const { message } = req.body;
+app.post("/chat", routes.Chat);
 
-  if (!message) {
-    return res.status(400).json({ error: 'Message is required' });
-  }
-
-  try {
-    const response = await axios.post(
-      'https://api.openai.com/v1/chat/completions',
-      {
-        model: 'gpt-3.5-turbo',
-        messages: [
-          { role: 'system', content: 'You are a helpful assistant who is meant to translate whatever they get into Italian' },
-          { role: 'user', content: message }
-        ],
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${OPENAI_API_KEY}`,
-        },
-      }
-    );
-
-    const chatResponse = response.data.choices[0].message.content;
-    res.json({ response: chatResponse });
-  } catch (error) {
-    console.error('Error communicating with OpenAI:', error.message);
-    res.status(500).json({ error: 'Failed to communicate with OpenAI' });
-  }
-});
+// Endpoint for Users
+app.post("/register", userRoutes.register);
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
