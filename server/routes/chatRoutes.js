@@ -6,7 +6,7 @@ const chatSchema = require("../Schemas/ChatSchema");
 
 exports.Chat = async function (req, res) {
   const { message, dbContent } = req.body;
-  console.log(req.body);
+  console.log(dbContent);
 
   if (!message) {
     return res.status(400).json({ error: "Message is required" });
@@ -36,21 +36,26 @@ exports.Chat = async function (req, res) {
 
     const chatResponse = response.data.choices[0].message.content;
 
+    const existingChat = await chatSchema.findOne({
+      chatName: dbContent.chatName,
+    });
+
+
+
     const chat = new chatSchema({
       chatName: dbContent.chatName,
       messages: dbContent.messages,
-      responses: dbContent.responses,
+      responses: chatResponse,
+      lastMessage: dbContent.lastMessage,
+      lastResponse: chatResponse,
       user: dbContent.user,
     });
 
-    // we need to check if the chat already exists
-    // if it does, we need to update the chat with the new message and response
-    // if it does not, we need to create a new chat
-    const existingChat = await chatSchema.findOne({ chatName: dbContent.chatName });
-
     if (existingChat) {
       existingChat.messages = dbContent.messages;
-      existingChat.responses = dbContent.responses;
+      existingChat.responses = [dbContent.responses, chatResponse];
+      existingChat.lastMessage = dbContent.lastMessage;
+      existingChat.lastResponse = chatResponse;
       await existingChat.save();
       return res.json({ response: chatResponse });
     }

@@ -1,43 +1,55 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Form from "../components/Form";
 import Responses from "../components/Responses";
 import Header from "../components/Header";
-import './AiChat.css';
+import "./AiChat.css";
 
 export default function AiChat({ setLoggedIn, user }) {
-  const [message, setMessage] = useState([]); // Add this line
+  const [message, setMessage] = useState(""); // Add this line
   const [response, setResponse] = useState("");
   const [previousMessages, setPreviousMessages] = useState([]); // Add this line
   const [previousResponses, setPreviousResponses] = useState([]); // Add this line
   const [chatName, setChatName] = useState("");
+  const [converse, setConverse] = useState(false);
 
-  function newChatName() {
-    setChatName(chatName + Math.floor(Math.random() * 1000));
-  }
+  useEffect(() => {
+    function newChatName() {
+      if (chatName === "") {
+        setChatName(chatName + Math.floor(Math.random() * 1000));
+        }
+    }
+    newChatName();
+  }, []);
 
   // Function to handle the form submission
 
-  function onSubmit(e) {
-    e.preventDefault();
-    // Get the message from the input field
-    const message = e.target.elements.message.value;
-    setMessage(message);
-    
-    if (chatName === "") {
-    newChatName();
-    }
-    
-    const conversation = {
-      chatName: chatName,
-      messages: [...previousMessages, { role: 'user', content: message }],
-      responses: [...previousResponses, { role: 'assistant', content: response }],
-      user: user._id
-    };
+async function onSubmit(e) {
+  e.preventDefault();
 
-    
+  // We need a way to update previousMessages only when we have already sent a message (converse = true). We can do this by adding the new message to the previousMessages array
 
-    // Send the message to the server
-    fetch("http://localhost:5000/chat", {
+  if (converse) {
+    handleConversation();
+  }
+
+
+  const conversation = {
+    chatName: chatName,
+    messages: [previousMessages],
+    responses: [previousResponses],
+    lastMessage: message,
+    user: user._id,
+  };
+
+  if (converse === false) {
+    setConverse(true);
+  }
+
+
+  console.log(conversation)
+
+  try {
+    const response = await fetch("http://localhost:5000/chat", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -46,38 +58,40 @@ export default function AiChat({ setLoggedIn, user }) {
         message: message,
         dbContent: conversation,
       }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        // console.log(data);
-        setResponse(data.response);
-      })
-      .then(() => {
-        handleConversation();
-      })
-      .catch((error) => {
-        console.error("Error sending message: ", error);
-      });
-  }
+    });
 
-function handleConversation() {
-  // Add the new message to the end of the previousMessages array
-  setPreviousMessages(previousMessages => [...previousMessages, message]);
-  setPreviousResponses(previousResponses => [...previousResponses, response]);
+    const data = await response.json();
+    setResponse(data.response);
+    handleConversation();
+  } catch (error) {
+    console.error("Error sending message: ", error);
+  }
 }
 
-return (
-  <div className="chat-main-container">
-    <Header className="Header" user={user} setLoggedIn={setLoggedIn} />
-    <div className="Responses">
-      <Responses
-        message={message}
-        response={response}
-        previousMessages={previousMessages}
-        previousResponses={previousResponses}
+  function handleConversation() {
+    // Add the new message to the end of the previousMessages array remove any "" from the arrays
+    setPreviousMessages([...previousMessages, message].filter(Boolean));
+    setPreviousResponses([...previousResponses, response].filter(Boolean));
+  }
+
+  return (
+    <div className="chat-main-container">
+      <Header className="Header" user={user} setLoggedIn={setLoggedIn} />
+      <div className="Responses">
+        <Responses
+          message={message}
+          response={response}
+          previousMessages={previousMessages}
+          previousResponses={previousResponses}
+        />
+      </div>
+      <Form
+        className="Form"
+        onSubmit={onSubmit}
+        setLoggedIn={setLoggedIn}
+        setMessage={setMessage}
+        user={user}
       />
     </div>
-    <Form className="Form" onSubmit={onSubmit} setLoggedIn={setLoggedIn} user={user} />
-  </div>
-);
+  );
 }
