@@ -9,6 +9,11 @@ export default function AiChat({ setLoggedIn, user }) {
   const [response, setResponse] = useState("");
   const [previousMessages, setPreviousMessages] = useState([]); // Add this line
   const [previousResponses, setPreviousResponses] = useState([]); // Add this line
+  const [chatName, setChatName] = useState("");
+
+  function newChatName() {
+    setChatName(chatName + Math.floor(Math.random() * 1000));
+  }
 
   // Function to handle the form submission
 
@@ -17,6 +22,19 @@ export default function AiChat({ setLoggedIn, user }) {
     // Get the message from the input field
     const message = e.target.elements.message.value;
     setMessage(message);
+    
+    if (chatName === "") {
+    newChatName();
+    }
+    
+    const conversation = {
+      chatName: chatName,
+      messages: [...previousMessages, { role: 'user', content: message }],
+      responses: [...previousResponses, { role: 'assistant', content: response }],
+      user: user._id
+    };
+
+    
 
     // Send the message to the server
     fetch("http://localhost:5000/chat", {
@@ -26,11 +44,12 @@ export default function AiChat({ setLoggedIn, user }) {
       },
       body: JSON.stringify({
         message: message,
+        dbContent: conversation,
       }),
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         setResponse(data.response);
       })
       .then(() => {

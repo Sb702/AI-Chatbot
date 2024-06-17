@@ -7,6 +7,8 @@ export default function Responses({
   previousResponses,
 }) {
 
+
+
 return (
   <div className="msg-container">
     {/* Beginning of response from api */}
