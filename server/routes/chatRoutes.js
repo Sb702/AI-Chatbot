@@ -44,16 +44,19 @@ exports.Chat = async function (req, res) {
 
     const chat = new chatSchema({
       chatName: dbContent.chatName,
-      messages: dbContent.messages,
+      messages: dbContent.lastMessage,
       responses: chatResponse,
       lastMessage: dbContent.lastMessage,
       lastResponse: chatResponse,
       user: dbContent.user,
     });
 
+    // Right now we're creating a new array of responses everytime a new message is sent to the chat. This is not ideal as it will create a new array of responses everytime a new message is sent. We need to update the existing array of responses with the new response
     if (existingChat) {
-      existingChat.messages = dbContent.messages;
-      existingChat.responses = [dbContent.responses, chatResponse];
+      const newResponses = [...existingChat.responses, chatResponse]
+      const newMessages = [...existingChat.messages, dbContent.lastMessage]
+      existingChat.messages = newMessages;
+      existingChat.responses = newResponses;
       existingChat.lastMessage = dbContent.lastMessage;
       existingChat.lastResponse = chatResponse;
       await existingChat.save();

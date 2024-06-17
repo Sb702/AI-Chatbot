@@ -7,7 +7,13 @@ export default function Responses({
   previousResponses,
 }) {
 
+  // console.log(message)
+  // console.log(response)
+  // console.log(previousMessages)
+  // console.log(previousResponses)
 
+
+  const lastMessage = previousMessages[previousMessages.length - 1];
 
 return (
   <div className="msg-container">
@@ -18,7 +24,7 @@ return (
           message && previousResponses[index] && (
             <div key={index}>
               <div className="user-msg-wrap">
-                <p className="main-user-message">{message}</p>
+                <p className="main-user-message">{previousMessages[index]}</p>
               </div>
               <div className="ai-msg-wrap">
                 <p className="main-ai-message">{previousResponses[index]}</p>
@@ -27,7 +33,7 @@ return (
           )
         ))}
         <div className="user-msg-wrap">
-          {message && <p>{message}</p>}
+          {lastMessage && <p>{lastMessage}</p>}
         </div>
         <div className="ai-msg-wrap">
           {response && <p>{response}</p>}

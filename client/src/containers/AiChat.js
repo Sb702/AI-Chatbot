@@ -46,7 +46,7 @@ async function onSubmit(e) {
   }
 
 
-  console.log(conversation)
+  // console.log(conversation)
 
   try {
     const response = await fetch("http://localhost:5000/chat", {
