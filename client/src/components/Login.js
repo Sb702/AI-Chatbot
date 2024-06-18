@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import './Login.css'
 
 export default function Login({ setLoggedIn, setUser }) {
   const [email, setEmail] = useState('')
@@ -27,16 +28,16 @@ export default function Login({ setLoggedIn, setUser }) {
   }
 
   return (
-    <div>
-        <label>
-            Email:
-            <input type="email" onChange={(e) => setEmail(e.target.value)} />
+    <div className='login-input-container'>
+        <label className='login-input-label'>
+            Email
+            <input className='login-input' type="email" onChange={(e) => setEmail(e.target.value)} />
         </label>
-        <label>
-            Password:
-            <input type="password" onChange={(e) => setPassword(e.target.value)} />
+        <label className='login-input-label'>
+            Password
+            <input className='login-input' type="password" onChange={(e) => setPassword(e.target.value)} />
         </label>
-        <button onClick={handleLogin}>Login</button>
+        <button className='login-btn' onClick={handleLogin}>Login</button>
     </div>
   )
 }

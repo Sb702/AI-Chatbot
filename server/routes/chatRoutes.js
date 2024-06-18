@@ -11,7 +11,7 @@ exports.Chat = async function (req, res) {
   if (!message) {
     return res.status(400).json({ error: "Message is required" });
   }
-
+// We want to include all the messages and responses in the conversation to openai. We can do this by including the messages and responses in the body of the request to the openai api
   try {
     const response = await axios.post(
       "https://api.openai.com/v1/chat/completions",
@@ -21,7 +21,7 @@ exports.Chat = async function (req, res) {
           {
             role: "system",
             content:
-              "You are a helpful assistant who is meant to translate whatever they get into Italian",
+              "You are a helpful assistant who is meant to help the user with whatever quetions they have.",
           },
           { role: "user", content: message },
         ],
