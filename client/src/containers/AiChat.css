@@ -4,6 +4,19 @@
     height: 100vh; /* Set the height to fill the viewport */
 }
 
+.conversation-btn-container {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.conversation-container {
+    position: absolute;
+    background-color: black;
+    color: white;
+    height: 100vh;
+}
+
 .Header {
     /* Your header styles here */
     grid-row: 1;

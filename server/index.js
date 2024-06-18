@@ -33,6 +33,7 @@ app.use(cors());
 
 // Endpoint to interact with ChatGPT
 app.post("/chat", routes.Chat);
+app.post("/allchats", routes.getChats);
 
 // Endpoint for Users
 app.post("/register", userRoutes.register);
