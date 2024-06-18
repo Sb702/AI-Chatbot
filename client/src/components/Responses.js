@@ -18,10 +18,10 @@ export default function Responses({
 return (
   <div className="msg-container">
     {/* Beginning of response from api */}
-    {response && (
+    { (
       <div>
         {previousMessages.map((message, index) => (
-          message && previousResponses[index] && (
+            (
             <div key={index}>
               <div className="user-msg-wrap">
                 <p className="main-user-message">{previousMessages[index]}</p>

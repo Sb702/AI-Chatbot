@@ -75,7 +75,7 @@ exports.Chat = async function (req, res) {
 // set up a function to fetch all chats from the database according to the userid of the user
 exports.getChats = async function (req, res) {
   const { userid } = req.body;
-  console.log(userid);
+  // console.log(userid);
 
   try {
     const chats = await chatSchema.find({ user: userid });
