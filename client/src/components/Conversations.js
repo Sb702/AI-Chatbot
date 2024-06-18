@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
+import './Conversation.css'
 
-export default function Conversations({ user, setPreviousMessages, setPreviousResponses, previousMessages, previousResponses }) {
+export default function Conversations({ user, setPreviousMessages, setPreviousResponses, previousMessages, previousResponses, setChatName }) {
     const [chats, setChats] = useState([])
 
     // console.log(user._id)
@@ -19,8 +20,8 @@ export default function Conversations({ user, setPreviousMessages, setPreviousRe
                 }),
             });
             const data = await response.json();
-            setChats(data.chats);
-            console.log(data)
+        setChats(data.chats);
+            // console.log(data)
         } catch (error) {
             console.error("Error fetching chats: ", error.message);
         }
@@ -33,18 +34,23 @@ export default function Conversations({ user, setPreviousMessages, setPreviousRe
     function handleChatClick(chat) {
         setPreviousMessages(chat.messages);
         setPreviousResponses(chat.responses);
-        console.log(previousMessages, previousResponses)
+        setChatName(chat.chatName);
+        // console.log(previousMessages, previousResponses)
     }
 
   return (
     <div>
         <h1>Conversations</h1>
-        <ul>
+        <ul className='conv-list'>
             {chats.map((chat, index) => (
-                <li key={index} onClick={() => handleChatClick(chat)}>
-                    <p>{chat.chatName}</p>
+                <li key={index} onClick={() => handleChatClick(chat)} className='conv-container'>
+                    {/* Properly format labels for everything including jsx so users know what the title is what the last message was etc*/}
+                    {/* <p>{chat.chatName}</p>
                     <p>{chat.lastMessage}</p>
-                    <p>{chat.lastResponse}</p>
+                    <p>{chat.lastResponse}</p> */}
+                    <div className='chat-name'>Name: {chat.chatName}</div>
+                    <div className='last-message'>Last Message: {chat.lastMessage}</div>
+
                 </li>
             ))}
         </ul>

@@ -1,0 +1,22 @@
+.conv-list {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 5%;
+}
+
+.conv-container {
+    background-color: gray;
+    list-style: none;
+    display: flex;
+    gap: 10px;
+}
+
+.conv-container:hover {
+    background-color: #333;
+    cursor: pointer;
+}
+
+.conv-container:active {
+    background-color: #666;
+}

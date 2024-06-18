@@ -14,26 +14,39 @@ export default function Responses({
 
 
   const lastMessage = previousMessages[previousMessages.length - 1];
+  // console.log(previousMessages)
+  // console.log(response) // This is the response from the API for our latest message
+
+
+
+
+  // console.log(previousResponses)
+
 
 return (
   <div className="msg-container">
     {/* Beginning of response from api */}
-    { (
+    <div>
+      {previousResponses.map((previousResponse, index) => (
+        <div key={index}>
+          <div className="user-msg-wrap">
+            <p className="main-user-message">{previousMessages[index]}</p>
+          </div>
+          <div className="ai-msg-wrap">
+            <p className="main-ai-message">{previousResponse}</p>
+          </div>
+        </div>
+      ))}
+      {/* Render the latest message and response */}
       <div>
-        {previousMessages.map((message, index) => (
-            (
-            <div key={index}>
-              <div className="user-msg-wrap">
-                <p className="main-user-message">{previousMessages[index]}</p>
-              </div>
-              <div className="ai-msg-wrap">
-                <p className="main-ai-message">{previousResponses[index]}</p>
-              </div>
-            </div>
-          )
-        ))}
+        <div className="user-msg-wrap">
+          <p className="main-user-message">{lastMessage}</p>
+        </div>
+        <div className="ai-msg-wrap">
+          <p className="main-ai-message">{response}</p>
+        </div>
       </div>
-    )}
+    </div>
     {/* End of response from api */}
   </div>
 );

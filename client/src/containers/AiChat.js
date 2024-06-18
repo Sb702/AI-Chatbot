@@ -85,6 +85,7 @@ export default function AiChat({ setLoggedIn, user }) {
         <div className="conversation-container">
           <Conversations
             user={user}
+            setChatName={setChatName}
             previousMessages={previousMessages}
             previousResponses={previousResponses}
             setPreviousMessages={setPreviousMessages}
@@ -93,7 +94,7 @@ export default function AiChat({ setLoggedIn, user }) {
         </div>
       )}
       <div className="Header">
-        <Header user={user} setLoggedIn={setLoggedIn} />
+        <Header user={user} setLoggedIn={setLoggedIn} chatName={chatName} />
       </div>
       <div className="Responses">
         <Responses

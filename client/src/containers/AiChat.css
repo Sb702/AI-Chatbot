@@ -15,6 +15,9 @@
     background-color: black;
     color: white;
     height: 100vh;
+    overflow: scroll;
+    max-width: 50%;
+    opacity: 90%;
 }
 
 .Header {
