@@ -12,6 +12,7 @@ export default function AiChat({ setLoggedIn, user }) {
   const [previousResponses, setPreviousResponses] = useState([]); // Add this line
   const [chatName, setChatName] = useState("");
   const [converse, setConverse] = useState(false);
+  const [loaded, setLoaded] = useState(false); // Add this line
   const [showConversations, setShowConversations] = useState(false);
 
   useEffect(() => {
@@ -90,6 +91,7 @@ export default function AiChat({ setLoggedIn, user }) {
             previousResponses={previousResponses}
             setPreviousMessages={setPreviousMessages}
             setPreviousResponses={setPreviousResponses}
+            setLoaded={setLoaded}
           />
         </div>
       )}
@@ -102,6 +104,8 @@ export default function AiChat({ setLoggedIn, user }) {
           response={response}
           previousMessages={previousMessages}
           previousResponses={previousResponses}
+          converse={converse}
+          loaded={loaded}
         />
       </div>
       <Form

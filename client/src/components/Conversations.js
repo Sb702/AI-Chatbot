@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import './Conversation.css'
 
-export default function Conversations({ user, setPreviousMessages, setPreviousResponses, previousMessages, previousResponses, setChatName }) {
+export default function Conversations({ user, setPreviousMessages, setPreviousResponses, previousMessages, previousResponses, setChatName, setLoaded }) {
     const [chats, setChats] = useState([])
 
     // console.log(user._id)
@@ -35,6 +35,7 @@ export default function Conversations({ user, setPreviousMessages, setPreviousRe
         setPreviousMessages(chat.messages);
         setPreviousResponses(chat.responses);
         setChatName(chat.chatName);
+        setLoaded(true);
         // console.log(previousMessages, previousResponses)
     }
 

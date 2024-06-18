@@ -5,6 +5,8 @@ export default function Responses({
   response,
   previousMessages,
   previousResponses,
+  converse,
+  loaded
 }) {
 
   // console.log(message)
@@ -26,6 +28,7 @@ export default function Responses({
 return (
   <div className="msg-container">
     {/* Beginning of response from api */}
+
     <div>
       {previousResponses.map((previousResponse, index) => (
         <div key={index}>
@@ -37,15 +40,27 @@ return (
           </div>
         </div>
       ))}
-      {/* Render the latest message and response */}
-      <div>
-        <div className="user-msg-wrap">
-          <p className="main-user-message">{lastMessage}</p>
+      {/* Render the latest message and response if lasMessage and converse */}
+      {loaded === false && converse === true && (
+        <div>
+          <div className="user-msg-wrap">
+            <p className="main-user-message">{lastMessage}</p>
+          </div>
+          <div className="ai-msg-wrap">
+            <p className="main-ai-message">{response}</p>
+          </div>
         </div>
-        <div className="ai-msg-wrap">
-          <p className="main-ai-message">{response}</p>
+      )}
+      {/* {lastMessage && (
+        <div>
+          <div className="user-msg-wrap">
+            <p className="main-user-message">{lastMessage}</p>
+          </div>
+          <div className="ai-msg-wrap">
+            <p className="main-ai-message">{response}</p>
+          </div>
         </div>
-      </div>
+      )} */}
     </div>
     {/* End of response from api */}
   </div>
