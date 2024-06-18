@@ -32,12 +32,6 @@ return (
             </div>
           )
         ))}
-        <div className="user-msg-wrap">
-          {lastMessage && <p>{lastMessage}</p>}
-        </div>
-        <div className="ai-msg-wrap">
-          {response && <p>{response}</p>}
-        </div>
       </div>
     )}
     {/* End of response from api */}
