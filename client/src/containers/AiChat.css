@@ -13,11 +13,11 @@
 .conversation-container {
     position: absolute;
     background-color: black;
-    color: white;
     height: 100vh;
     overflow: scroll;
-    max-width: 50%;
-    opacity: 90%;
+
+    opacity: 98%;
+    top: 0;
 }
 
 .Header {

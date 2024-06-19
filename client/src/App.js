@@ -1,6 +1,7 @@
 import React, { useState }from 'react';
 import AiChat from './containers/AiChat';
 import UserAuth from './containers/UserAuth';
+import './App.css';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);

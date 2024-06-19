@@ -1,8 +1,12 @@
 const OpenAI = require("openai-api");
 const axios = require("axios");
-const OPENAI_API_KEY =
-  "sk-proj-W5OtN5pJhPZwAd8JEL59T3BlbkFJLn6kEDrJi4lbVWmDic0N";
 const chatSchema = require("../Schemas/ChatSchema");
+const dotenv = require("dotenv");
+
+dotenv.config();
+
+const OPENAI_API_KEY = process.env.OPENAI_KEY;
+
 
 exports.Chat = async function (req, res) {
   const { message, dbContent } = req.body;

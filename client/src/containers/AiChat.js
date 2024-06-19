@@ -77,26 +77,29 @@ export default function AiChat({ setLoggedIn, user }) {
 
   return (
     <div className="chat-main-container">
-      <div className="conversation-btn-container">
-        <button onClick={() => setShowConversations(!showConversations)}>
-          Conversations
-        </button>
-      </div>
-      {showConversations && (
-        <div className="conversation-container">
-          <Conversations
-            user={user}
-            setChatName={setChatName}
-            previousMessages={previousMessages}
-            previousResponses={previousResponses}
-            setPreviousMessages={setPreviousMessages}
-            setPreviousResponses={setPreviousResponses}
-            setLoaded={setLoaded}
-          />
-        </div>
-      )}
+      <div className="conversation-btn-container"></div>
+
       <div className="Header">
-        <Header user={user} setLoggedIn={setLoggedIn} chatName={chatName} />
+        <Header
+          user={user}
+          setLoggedIn={setLoggedIn}
+          chatName={chatName}
+          showConversations={showConversations}
+          setShowConversations={setShowConversations}
+        />
+        {showConversations && (
+          <div className="conversation-container">
+            <Conversations
+              user={user}
+              setChatName={setChatName}
+              previousMessages={previousMessages}
+              previousResponses={previousResponses}
+              setPreviousMessages={setPreviousMessages}
+              setPreviousResponses={setPreviousResponses}
+              setLoaded={setLoaded}
+            />
+          </div>
+        )}
       </div>
       <div className="Responses">
         <Responses

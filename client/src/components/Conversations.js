@@ -1,60 +1,104 @@
-import React, { useEffect, useState } from 'react'
-import './Conversation.css'
+import React, { useEffect, useState } from 'react';
+import { Box, List, ListItem, ListItemText, Typography, Card, CardContent, CardHeader, CircularProgress } from '@mui/material';
+import { styled } from '@mui/system';
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 
-export default function Conversations({ user, setPreviousMessages, setPreviousResponses, previousMessages, previousResponses, setChatName, setLoaded }) {
-    const [chats, setChats] = useState([])
+const StyledBox = styled(Box)({
+  backgroundColor: '#f5f5f5',
+  borderRadius: '10px',
+  margin: '10px',
+  padding: '10px',
+});
 
-    // console.log(user._id)
+const StyledListItem = styled(ListItem)({
+  margin: '10px',
+  borderRadius: '10px',
+  '&:hover': {
+    backgroundColor: '#ddd',
+  },
+});
 
-    // function to fetch all chats from the database according to the userid of the user at http://localhost:5000/allchats
-    useEffect(() => {
+const StyledCard = styled(Card)({
+  boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)',
+  transition: '0.3s',
+  borderRadius: '5px', 
+  margin: '10px',
+  '&:hover': {
+    boxShadow: '0 8px 16px 0 rgba(0,0,0,0.2)',
+  },
+});
+
+export default function Conversations({ user, setPreviousMessages, setPreviousResponses, setChatName, setLoaded }) {
+  const [chats, setChats] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
     async function getChats() {
-        try {
-            const response = await fetch("http://localhost:5000/allchats", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    userid: user._id,
-                }),
-            });
-            const data = await response.json();
+      try {
+        const response = await fetch("http://localhost:5000/allchats", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userid: user._id,
+          }),
+        });
+        const data = await response.json();
         setChats(data.chats);
-            // console.log(data)
-        } catch (error) {
-            console.error("Error fetching chats: ", error.message);
-        }
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
     }
     getChats();
-    }, [user._id])
+  }, [user._id]);
 
-    // Develop a function where if we click on a chat, we can see the entire conversation in the chat. This will be obtained by setting the setPreviousMessages and setPreviousResponses to the messages and responses of the chat we clicked on. Those are at chats.messages and chats.responses respectively
+  function handleChatClick(chat) {
+    setPreviousMessages(chat.messages);
+    setPreviousResponses(chat.responses);
+    setChatName(chat.chatName);
+    setLoaded(true);
+  }
 
-    function handleChatClick(chat) {
-        setPreviousMessages(chat.messages);
-        setPreviousResponses(chat.responses);
-        setChatName(chat.chatName);
-        setLoaded(true);
-        // console.log(previousMessages, previousResponses)
-    }
+  if (loading) {
+    return <CircularProgress />;
+  }
+
+  if (error) {
+    return (
+      <Box display="flex" justifyContent="center" alignItems="center" flexDirection="column">
+        <ErrorOutlineIcon color="error" style={{ fontSize: 60 }} />
+        <Typography variant="h6" color="error">
+          {error}
+        </Typography>
+      </Box>
+    );
+  }
 
   return (
-    <div>
-        <h1>Conversations</h1>
-        <ul className='conv-list'>
-            {chats.map((chat, index) => (
-                <li key={index} onClick={() => handleChatClick(chat)} className='conv-container'>
-                    {/* Properly format labels for everything including jsx so users know what the title is what the last message was etc*/}
-                    {/* <p>{chat.chatName}</p>
-                    <p>{chat.lastMessage}</p>
-                    <p>{chat.lastResponse}</p> */}
-                    <div className='chat-name'>Name: {chat.chatName}</div>
-                    <div className='last-message'>Last Message: {chat.lastMessage}</div>
-
-                </li>
-            ))}
-        </ul>
-    </div>
-  )
+    <StyledBox>
+      <Typography variant="h4" gutterBottom component="div">
+        Conversations
+      </Typography>
+      <List>
+        {chats.map((chat, index) => (
+          <StyledListItem 
+            key={index} 
+            button 
+            onClick={() => handleChatClick(chat)}
+          >
+            <StyledCard>
+              <CardHeader
+                title={chat.chatName}
+                subheader={`Last Message: ${chat.lastMessage}`}
+              />
+            </StyledCard>
+          </StyledListItem>
+        ))}
+      </List>
+    </StyledBox>
+  );
 }
